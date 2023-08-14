@@ -101,7 +101,7 @@ const getValue = ({ name }) => {
         )}
 
         {showModal && (
-          <Modal onClose={toggleModal} url={largeImageURL} />
+          <Modal onClose={toggleModal} url={largeImageURL} alt={tags} />
         )}
 
         {loading && <ColorRingLoader />}
