@@ -24,7 +24,9 @@ export default function Pixabay () {
 // ТОТАЛД ХИТС ЭТО ПАРАМЕТР СО СТЕЙТА ДЛЯ КОТНРОЛЯ КОЛИЧЕСТВА ВСЕГО И ВЫДАВАТЬ ОШИБКУ ЕСЛИ ЗАКОНЧИЛИСЬ ФОТКИ
 
 
-
+// тогл модалки который делает инверсию состояния 
+// + пропами передаёт параметры большой картинки 
+// + тэга
 const toggleModal = (imageURL, tags) => {
   setShowModal(prevShowModal => !prevShowModal);
   setLargeImageURL(imageURL);
@@ -37,13 +39,14 @@ const getValue = ({ name }) => {
   setPage(1);
   setTotalHits(0);
 };
-
+// ОПИСАНИЕ ФУНКЦИИ ФЕТЧА ФОТО
   const fetchImages = useCallback(() => {
     setLoading(true);
 
     axios
       .get(`${url}?key=${apiKey}&q=${name}&page=${page}&${options}`)
       .then(response => {
+        // ОПИСАНИЕ ОШИБКИ
         if (!response.data.hits.length) {
           
             toast.error(
@@ -60,29 +63,32 @@ const getValue = ({ name }) => {
             );
           
         }
-
+// ЕЛИ ОК ТО БЕРЁМ В ЛОК ПЕРЕМЕН ЗАПИСЫВАЕМ НУЖНЫЕ НАМ ПАРАМЕТРЫ С БЮКА
         const modifiedHits = response.data.hits.map(({id, tags, webformatURL, largeImageURL }) => ({
           id: id,
           tags,
           webformatURL,
           largeImageURL,
         }));
-
+// МЕНЯЕМ СОСОТОЯНИЕ БЕЗ МУТАЦИИ, РАСПЫЛЯЕМ СТАРЫЙ СТЕЙТ + НОВЫЙ
         setHits(prevHits => [...prevHits, ...modifiedHits]);
+        // ОБНОВЛЯЕМ ЧИСЛО НАЙДЕНЫЙ ФОТО
         setTotalHits(response.data.totalHits);
+        // ОТМЕНЯЕМ ЗАГРУЗКУ ЧТО Б ЛОУДЕР ПРОПАЛ
         setLoading(false);
       })
       .catch(error => {
         console.error(error.message);
         setLoading(false);
       });
+      // МАСИВ ЗАВИСИМОТЕЙ 2 ПАРАМЕТРА КОТОРЫЕ БУДУТ ОБНОВЛЯТЬСЯ В ПОИСКЕ ПОЛЬЗОВАТЕЛЕМ 
   }, [name, page]);
 
   useEffect(() => {
     if (name.trim() === '') {
       return;
     }
-
+// ВЫЗОВ ФУНКЦИИ, ДОВЛЕНИЕ ЕЁ В МАСИВ ЗАВИСИМОТСЕЙ
     fetchImages();
   }, [name, page, fetchImages]);
 

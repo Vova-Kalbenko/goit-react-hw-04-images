@@ -9,7 +9,7 @@ export default function Searchbar ({onSubmitHandler}) {
     const { value } = event.currentTarget;
     setName(value)
   };
-
+// ОШИБКА ЕСЛИ НЕ ПРОХОДИТ ПОИСК
   const handleSubmit = event => {
     event.preventDefault();
 
@@ -26,7 +26,14 @@ export default function Searchbar ({onSubmitHandler}) {
       );
       return;
     }
-
+    // ЕСЛИ ВСЁ ОК ТО
+    //   setHits([]);
+  // setName(name);
+  // setPage(1);
+  // setTotalHits(0);
+  // ЭТОИ СОСТОЯНИЯ НАПОЛНЯЮТЬСЯ ИНФОЙ С БЭКА ПРИ САБМИТЕ ПОИСКА
+  
+// десруткт параметр с МЕЙНА 36 СТР
     onSubmitHandler({name});
 
     reset();
